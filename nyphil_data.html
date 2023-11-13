@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<!-- change -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Marcel Castro-Lima</title>
+        <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"> -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+        
+    </head>
+
+    <!-- Header -->
+    <body>
+        <div id="header">
+            <div id="head-container">
+                <div id="header-logo">
+                    <img src="./images/logomcl.png" height="32px">
+                </div>
+                <div id="main-nav">
+                    <!-- <section id="menu-items"> -->
+                        <div class="menu-link"><a href="./nyphil_data.html">Home</a></div>
+                        <div class="menu-link"><a href="./data_about.html">About</a></div>
+                        <div class="menu-link"><a href="./data_contact.html">Contact</a></div>
+                        
+                    <!-- </section> -->
+                </div>
+                <div id="mobile-buttom"><span class="material-symbols-outlined">
+                    menu
+                    </span></div>
+            </div>
+            <!-- <div id="mobile"></div> -->
+        </div>
+
+        <!-- body -->
+        <div id="general-container">
+
+            <!-- Main Section -->
+            <div id="front-research" style="display: flex; flex-direction: column; align-items: center;">
+                <div>
+                    <h1 style="text-align: center;">NY Philharmonic Data Analysis Project</h1>
+                    <hr>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <p>
+                        <h3>Introduction and objectives</h3>
+                    </p>
+                    <p>
+                        One of the biggest concerns contemporary composers have is how much new music professional orchestras are playing compared to old music from deceased composers. As a living composer myself, I decided to analyze performance data in order to observe how recent and diverse in origin the composers being performed were. I was able to find a data set with data from all the performances by the NY Philharmonic between 1842 and 2020. The dataset had no information about the composers’ birth year or country of origin, so I used Python to web scrape Wikipedia and Google to retrieve that information. Finally, I created a <a href="https://public.tableau.com/app/profile/marcel.castro.lima/viz/NYPHIL/Dashboard1" target="_blank">dashboard in Tableau</a> with visualizations and interactive filters.
+                    </p>
+                    <ol>
+                        <li><a href="#data-acquisition">Data acquisition, conversion, and cleaning in Microsoft Excel</a></li>
+                        <li>
+                            <a href="#web-scraping">Web Scraping for Composers Demographics in Python</a>
+                            <ul>
+                                <li>2a. <a href="#web-scrapinga">Wikipedia</a></li>
+                                <li>2b. <a href="#web-scrapingb">Google Search Engine</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#data-normalization">Database Normalization in SQL Server</a></li>
+                        <li><a href="#data-exploration">Initial Exploratory Analysis in SQL</a></li>
+                        <li><a href="#data-visualization">Data Visualization in Tableau</a></li>
+                    </ol>
+                    <p>
+                        <h3 id="data-acquisition">1 – Data acquisition, conversion, and cleaning in Microsoft Excel</h3>
+                    </p>
+                    <p>
+                        The dataset for this project was acquired from <a href="https://data.world/popculture/new-york-philharmonic-performances" target="_blank">Data World</a>. It was compiled by the New York Philharmonic and consists of data on performances realized by the orchestra since 1842. The data is made available as one JSON file with a record for each program (a set of performances where the repertoire and the performers are precisely the same). The records have nested items for dates, works performed, performers, etc.
+                    </p>
+                    <pre><code class="language-json">
+{
+"programs": [
+    {
+    "id": "00646b9f-fec7-4ffb-9fb1-faae410bd9dc-0.1",
+    "programID": "3853",
+    "orchestra": "New York Philharmonic",
+    "season": "1842-43",
+    "concerts": [
+        {
+        "eventType": "Subscription Season",
+        "Location": "Manhattan, NY",
+        "Venue": "Apollo Rooms",
+        "Date": "1842-12-07T05:00:00Z",
+        "Time": "8:00PM"
+        }
+    ],
+    "works": [
+        {
+        "ID": "52446*",
+        "composerName": "Beethoven,  Ludwig  van",
+        "workTitle": "SYMPHONY NO. 5 IN C MINOR, OP.67",
+        "conductorName": "Hill, Ureli Corelli",
+        "soloists": []
+        },
+        {
+        "ID": "8834*4",
+        "composerName": "Weber,  Carl  Maria Von",
+        "workTitle": "OBERON",
+        "movement": "\"Ozean, du Ungeheuer\" (Ocean, thou mighty monster), Reiza (Scene and Aria), Act II",
+        "conductorName": "Timm, Henry C.",
+        "soloists": [
+            {
+            "soloistName": "Otto, Antoinette",
+            "soloistInstrument": "Soprano",
+            "soloistRoles": "S"
+            }
+        ]
+        }
+                    </code></pre>
+                    <p>
+                        The first step was to unwrap the JSON files so that every record was represented in its own row. Unwanted data was deleted, such as all data pertaining to venues, performers, and conductors. The composers' names were changed from ‘Last Name, First Name’ to ‘Full Name’ to make it easier when web scraping for the demographics. The date was trimmed to a mm/dd/yyyy format.
+                    </p>
+                    <p>
+                        <img src="./images/nyphil_data_images/power query.png" alt="image of Excel" style="width: 100%; max-width: 600px;">
+                    </p>
+                    <p>
+                        <h3 id="web-scraping">2 – Web Scraping for Composers Demographics in Python</h3>
+                    </p>
+                    <p>
+                        The main goal of this analysis involved analyzing data about how recent was the orchestra's repertoire and the origin of the composers being performed. Since the original dataset had no geographic or date of birth data relating to composers, I attempted to extract this information from the web using Python. I used two complementary strategies for this: (1) scrape a Wikipedia '<a href="https://en.wikipedia.org/wiki/List_of_composers_by_name" target="_blank">List of Composers by Name</a>', which contained the date of birth information, and (2) automatically do a Google Search for each composer and extract the date of birth and place of birth from Google’s ‘People Card.’ Both had advantages and weaknesses. The information extracted from both processes was exported as .csv for further cleaning in Excel.
+                    </p>
+                    <p>
+                        <h4 id="web-scrapinga">2a. Wikipedia</h4>
+                    </p>
+                    <p>
+                        Wikipedia was only one page long, making the scraping much faster. The number of matches, however, was limited (about 1/3 of the composers in the dataset). The Wikipedia list also had no place of birth information.
+                    </p>
+                    <p>
+                        After creating a list with the composers from the data set and one with the composers, birth, and death year from the wikipedia page, I checked to see if the name in one list was contained in the other. If it was, I would use the index of the matched name to retrieve the Birth and Death information.
+                    </p>
+                    <p>
+                        <a href="https://github.com/marcelcastrolima/nyphil_data_project/blob/main/web_scraping_wikipedia.ipynb" target="_blank">
+                            Full code on GitHub
+                        </a>
+                    </p>
+                    <pre><code>
+for b, d in enumerate(data_list):
+    for c, w in enumerate(wiki_list):
+        if d in w or w in d:
+            result_list.append([d, b, w, c])
+            found = True
+            break
+    if found:
+        pass
+    else:
+        result_list.append([d, b, "NOT FOUND", ""])
+        false_count += 1
+    found = False   
+                    </code></pre>
+
+                    <p>
+                        <img src="./images/nyphil_data_images/python_wikipedia_scrape.png" alt="resulting table in python" style="width: 100%; max-width: 500px;">
+                    </p>
+                    
+                    <p>
+                        <h4 id="web-scrapingb">2b. Google Search Engine</h4>
+                    </p>
+                    <p>
+                        Scraping Google was more time-consuming as I had to perform a Google search for each of the more than 2,800 composers in the data set. The result, however, was much more fruitful. More than 2,000 matches were achieved automatically, and geographical data was also collected.
+                    </p>
+                    <p>
+                        After identifying a tag and class associated with the demographic info in the People Card, we ran a google search for each composer and extracted all strings that matched that class. Next, we merged the strings for each composer into one string that we added to a data frame using Pandas. We then exported that data frame as .csv for further cleaning.
+                    </p>
+                    <p>
+                        <a href="https://github.com/marcelcastrolima/nyphil_data_project/blob/main/web_scraping_wikipedia.ipynb" target="_blank">
+                            Full code on GitHub
+                        </a>
+                    </p>
+                    <pre><code>
+//Performs a google search for each item in data_list
+
+for c, i in enumerate(data_list):
+    comp_string = i.replace(" ","+")
+    url = 'https://www.google.com/search?q=' + comp_string + 'composer' #Google Search URL
+    page = requests.get(url)
+    print(page, c, '/2871')
+    google_full_page = BeautifulSoup(page.text, 'html.parser')
+    person_card = google_full_page.find_all('span', class_='BNeawe tAd8D AP7Wnd') #Class associated with the People Card
+    list_strings = [item.text.strip() for item in person_card]
+    return_list.append([c, i, list_strings[:2]])
+                    </code></pre>
+                    
+                    <p>
+                        <img src="./images/nyphil_data_images/python_google_scrape.png" alt="resulting table in python" style="width: 100%; max-width: 500px;">
+                    </p>
+                    
+                    <p>
+                        <h3 id="data-normalization">3 – Database Normalization in SQL Server</h3>
+                    </p>
+                    <p>
+                        After compiling the composers’ demographics data into its own table, we imported the data into an SQL Server using SSMS and normalized it, separating the data into three tables: one for the composers’ data, one for the works’ data, and one that contained information about all performances and referenced the other tables through foreign keys.
+                    </p>
+                    <p>
+                        <img src="./images/nyphil_data_images/database_diagram.png" alt="database diagram" style="width: 100%; max-width: 800px;">
+                    </p>
+                    <p>
+                        <h3 id="data-exploration">4 – Initial Exploratory Analysis in SQL</h3>
+                    </p>
+                    <p>
+                        On the SQL server, I did some initial queries to find out how dispersed the data was. For example, 1387 composers were performed only one time, while Beethoven was performed 4419 times.
+                    </p>
+                    <pre><code>
+/*Number of composers performed a single time*/
+with singlePerformer# as
+(
+select composer_info$.nameComposer, 
+count(programs_works$.Date) as number_of_performances
+from programs_works$
+join composer_info$
+on composer_info$.composerID = programs_works$.composerID
+group by composer_info$.nameComposer
+having count(programs_works$.Date) = 1
+) select count(number_of_performances)
+from singlePerformer#    
+                    </code></pre>
+                    <p>
+                        In addition to that, over 35% of the pieces performed were from composers from Germany, the United States, Russia, Austria, and France.
+                    </p>
+                    <pre><code>
+--Percentile of performances per country
+select composer_info$.Country, 
+(count(programs_works$.Date)/64862.0)*100 AS percentile
+from programs_works$
+join composer_info$
+on composer_info$.composerID = programs_works$.composerID
+where year(programs_works$.Date) > 1950 and country is not null
+group by composer_info$.Country
+order by count(programs_works$.Date) desc
+                    </code></pre>
+                    <p>
+                        Curiously, 77 performances featured composers less than 15 years old. That’s explained by the fact that the NY Philharmonic has a ‘Very Young Composers’ series featuring high school students. The youngest composers  to be played, Graydon Hanson and Paloma Alonso, were only 9 years old.
+                    </p>
+                    <pre><code>
+/*Composer age by performance*/
+select programs_works$.Date, composer_info$.nameComposer, 
+year(programs_works$.Date)-composer_info$.Birth as years_old
+from programs_works$
+join composer_info$
+on composer_info$.composerID = programs_works$.composerID
+where composer_info$.Birth is not null
+group by programs_works$.Date,composer_info$.nameComposer,
+composer_info$.Birth
+order by years_old
+                    </code></pre>
+                    <p>
+                        
+                        <a href="https://github.com/marcelcastrolima/nyphil_data_project/blob/main/sample_queries.sql" target="_blank">
+                            Sample queries
+                        </a>
+                    </p>
+                    <p>
+                        <h3 id="data-visualization">5 – Data Visualization in Tableau</h3>
+                    </p>
+                    <p>
+                        Finally, I have imported the database into Tableau to create the visualizations for the <a href="https://public.tableau.com/app/profile/marcel.castro.lima/viz/NYPHIL/Dashboard1" target="_blank">Dashboard</a>. The geographic and age information is clearly displayed, along with filters that allow the user to visualize data for a certain range of time or from a specific group of countries. For example, one can notice how, since 1842, the average age of performed composers has grown steadily. The most performed composer, Beethoven, was 56 years old when first performed. In 2020, he was 250 years old.
+                    </p>
+                    <p>
+                        <img src="./images/nyphil_data_images/tableau1.png" alt="line chart in tableau" style="width: 100%; max-width: 600px;">
+                    </p>
+                    <p>
+                        Another interesting insight is that if we filter the date range to 1842-1920, with the exception of Australia, no country from the south hemisphere had a composer performed, an all—a great contrast with the 72 total countries represented in NY Philharmonic concerts by 2020.
+                    </p>
+                    <p>
+                        <img src="./images/nyphil_data_images/Tableau2.png" alt="dashboard in tableau" style="width: 100%; max-width: 600px;">
+                    </p>
+                </div>                
+            </div>
+            <div id="footer">
+                <img id="footer-logo" src="./images/logomcl.png" height="32px">
+                <p style="padding: 10px;">©Marcel Castro-Lima</p>
+            </div>
+        </div>
+        
+    
+        <script src="script.js"></script>
+        <script src="mobile-nav.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    
+    </body>
+</html>

@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+body {
+    background-color: #ffffff;
+    background-image: url("./images/background-grid.png");
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.95em;
+}
+
+h1, h2, h3, h4 {
+    color: #333333;
+    font-family: 'Abril Fatface', cursive;
+    margin-bottom: 0px;
+}
+
+p {
+    text-align: justify;
+    color: #85868C;
+    margin-bottom: 0px;
+}
+
+a {
+    color: #1ebbf0;
+    text-decoration: none;
+}
+
+hr {
+    width:50%;
+    text-align:center;
+    border-color: #85868c52;
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    padding: 0px;
+    height: auto;
+    min-height: 50px;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px;
+}
+
+#footer {
+    display: flex;
+    background-color: #ffffff;
+    border-top: solid 2px #33333365;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+#head-container {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-evenly;
+    color: #333333;
+    font-weight: bold;
+    max-width: 1000px;
+    min-height: 50px;
+}
+
+#main-nav {
+    display: flex;
+    width: 50%;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+#main-nav a {
+    color: #333333;
+}
+
+#main-nav a:link {
+    text-decoration: none;
+}
+  
+#main-nav a:visited {
+    text-decoration: none;
+}
+
+#mobile-buttom {
+    display: none;
+    cursor: pointer;
+}
+
+
+.menu-link {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#header-logo {
+    display: flex;
+    width: 50%;
+    padding: 10px;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+#general-container {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    box-shadow: 0px 0px 15px;
+    background-color: #ffffff94;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+}
+
+#front-bio {
+    padding: 22px;
+}
+
+.text-picture-side {
+    display: flex;
+    align-items: start;
+}
+
+#front-research {
+    padding: 22px;
+}
+
+.carousel-container {
+    width: 100%;
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+}
+
+.carousel {
+    /* border: 1px solid #4F5961; */
+    box-shadow: 1px 1px 10px;
+    border-radius: 10px;
+    /* background-color: ; */
+    /* height: 500px; */
+    position: relative;
+    overflow: hidden;
+}
+
+.slider {
+    height: 100%;
+    display: flex;
+    /* align-items: start; */
+    width: 400%;
+    transition: all 0.3s;
+    
+}
+
+.slider section {
+    flex-basis: 100%;
+    display: flex;
+    /* flex-wrap: wrap; */
+    /* justify-content: center; */
+    /* align-content: start; */
+    /* align-items: center; */
+}
+
+.piece-title {
+    background-color: hsla(202, 100%, 91%, 0.507);
+    margin: 0;
+    padding: 10px;
+}
+
+.performers-names {
+    font-weight: bold;
+}
+
+.port-video {
+    padding: 10px;
+    width: 90%;
+    max-width: 350px;
+    max-height: 197px;
+    border-radius: 25px;
+}
+
+.port-container {
+    display: flex;
+    height: 100%;
+}
+
+.controls {
+    display: flex;
+    justify-content:space-between;
+}
+
+.arrow {
+    cursor: pointer;
+}
+
+.controls ul {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    align-self: center;
+}
+
+.controls ul li {
+    width: 10px;
+    height: 10px;
+    border: 2px solid black;
+    border-radius: 50px;
+    margin: 5px;
+    background-color: black;
+    cursor: pointer;
+}
+
+.controls ul li.selected {
+    background-color: transparent;
+}
+
+@media (max-width:800px) {
+    .port-container { flex-wrap: wrap;  justify-content: center;}
+    #head-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .port-video {
+        margin-bottom: 60px;
+    }
+
+    #main-nav {
+        display: none;
+        width: auto;
+        height: 50px;
+    }
+    
+    #header-logo {
+        /* flex-basis: max-content; */
+        width: auto;
+    }
+
+    .text-picture-side {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #mobile-buttom {
+        position: absolute;
+        top: 12px;
+        right: 20px;
+        display: block;
+    }
+
+    pre {
+        width: 600px;
+        overflow: scroll;
+    }
+}
+
+@media (max-width:600px) {
+    pre {
+        width: 400px;
+        overflow: scroll;
+    }
+}
+
+
+@media (max-width:400px) {
+    #main-nav {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+    pre {
+        width: 320px;
+        overflow: scroll;
+    }
+}
