@@ -5,6 +5,7 @@ body {
     background-image: url("./images/background-grid.png");
     font-family: 'Roboto', sans-serif;
     font-size: 0.95em;
+    color: #77797f;
 }
 
 h1, h2, h3, h4 {
@@ -15,8 +16,7 @@ h1, h2, h3, h4 {
 
 p {
     text-align: justify;
-    color: #85868C;
-    margin-bottom: 0px;
+    margin: 5px 0px;
 }
 
 a {
@@ -28,6 +28,10 @@ hr {
     width:50%;
     text-align:center;
     border-color: #85868c52;
+}
+
+img {
+    margin: 10px
 }
 
 #header {
@@ -101,6 +105,10 @@ hr {
     padding: 10px;
     align-items: center;
     /* justify-content: center; */
+}
+
+#header-logo img {
+    margin: 0px;
 }
 
 #general-container {
@@ -217,6 +225,11 @@ hr {
 
 .controls ul li.selected {
     background-color: transparent;
+}
+
+pre {
+    width: 950px;
+    overflow: scroll;
 }
 
 @media (max-width:800px) {

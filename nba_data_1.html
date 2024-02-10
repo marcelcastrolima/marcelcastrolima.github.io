@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!-- change -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Marcel Castro-Lima</title>
+        <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"> -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+        
+    </head>
+
+    <!-- Header -->
+    <body>
+        <div id="header">
+            <div id="head-container">
+                <div id="header-logo">
+                    <img src="./images/logomcl.png" height="32px">
+                </div>
+                <div id="main-nav">
+                    <!-- <section id="menu-items"> -->
+                        <div class="menu-link"><a href="./index.html">Home</a></div>
+                        <div class="menu-link"><a href="./ny_phil_data.html">NY Phill Project</a></div>
+                        <div class="menu-link"><a href="./nba_data_1.html">NBA Project Data Modeling</a></div>
+                        
+                    <!-- </section> -->
+                </div>
+                <div id="mobile-buttom"><span class="material-symbols-outlined">
+                    menu
+                    </span></div>
+            </div>
+            <!-- <div id="mobile"></div> -->
+        </div>
+
+        <!-- body -->
+        <div id="general-container">
+
+            <!-- Main Section -->
+            <div id="front-research" style="display: flex; flex-direction: column; align-items: center;">
+                <div>
+                    <h1 style="text-align: center;">NBA Data Modelling Project</h1>
+                    <hr>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <p>
+                        <h3>Introduction and objectives</h3>
+                    </p>
+                    <p>
+                        This project analyzes the influence of various NBA statistics on regular-season success. Utilizing the insights gleaned from a dialogue with the large language model, Gemini, a multivariate linear regression model was constructed using data retrieved from the NBA's public statistics API via Python. Feature engineering techniques were employed to preprocess and refine the acquired data. The model aims to predict a team's winning percentage based on the identified key statistical parameters. By interpreting the model's results and conducting an evaluation, the project intends to assess the effectiveness of the parameters suggested by Gemini in determining a team's regular season performance.
+                    </p>
+                    <p>
+                        The full code for this project is available on <a href="https://github.com/marcelcastrolima/nba_data_project">GitHub</a>.
+                    </p>
+                    <ol>
+                        <li><a href="#data-collection">Data Collection</a></li>
+                        <li><a href="#data-cleaning">Data Cleaning and Feature Engineering</a></li>
+                        <li><a href="#feature-selection">Feature Selection</a></li>
+                        <li><a href="#model-implementation">Model Implementation</a></li>
+                        <li><a href="#model-evaluation">Model Evaluation</a></li>
+                    </ol>
+                    <p>
+                        <h3 id="data-acquisition">1 – Data Collection</h3>
+                    </p>
+                    <p>
+                        As a source for this project, I used data acquired from the NBA API Python package available at https://github.com/swar/nba_api, which provides several endpoints for NBA statistics of various sorts. The stats suggested by Gemini as good predictors of a successful regular season are summarized below.
+                    </p>
+                    <p><strong>Offensive Efficiency</strong></p>
+                    <ul>
+                        <li><strong>Points per game:</strong> Scoring consistently at a high-level wins games. Top contenders typically average over 110 points per game.</li>
+                        <li><strong>Field goal percentage:</strong> Converting shots efficiently maximizes opportunities. Look for teams shooting above 45% overall and 35% from three-point range.</li>
+                        <li><strong>Assist-to-turnover ratio:</strong> Moving the ball and taking care of it reduces wasted possessions and creates better scoring chances. Aim for ratios above 2.0.</li>
+                    </ul>
+                    <p><strong>Defensive Prowess</strong></p>
+                    <ul>
+                        <li><strong>Points allowed per game:</strong> Limiting the opponent's scoring keeps you in contention. Strong teams hold opponents below 105 points per game.</li>
+                        <li><strong>Rebounds per game:</strong> Controlling the boards limits second-chance opportunities and fuels transition offense. Look for teams grabbing over 50 rebounds per game.</li>
+                    </ul>
+                    <p><strong>Balance and Depth</strong></p>
+                    <ul>
+                        <li><strong>Scoring distribution:</strong> Multiple players contributing offensively prevents opponents from focusing on single-stop strategies. Balanced teams have at least 3 players averaging double-digit points.</li>
+                        <li><strong>Bench production:</strong> A reliable bench unit can provide scoring, defensive intensity, and rest for starters. Top teams see significant contributions from their reserves.</li>
+                    </ul>
+                    <p><strong>Intangibles</strong></p>
+                    <ul>
+                        <li><strong>Home court advantage:</strong> Winning at home is crucial for playoff seeding and momentum. Strong teams typically boast a winning home record.</li>
+                    </ul>
+                    <p>
+                        Some of these stats were readily available, although distributed in different datasets: points per game, field goal percentage, rebounds per game, and points allowed. All the others required some degree of transformation.
+                    </p>
+                    <p>
+                        Datasets from four endpoints were used:
+                    </p>
+                    <p>
+                        <strong>LeagueStandings:</strong> The LeagueStandings dataset has stats for all teams for a given season. I pulled data for all years since 1982 and saved itnto a dataframe.
+                    </p>
+                    <p>
+                        <strong>TeamYearByYear:</strong> The LeagueStandings dataset has stats for all teams for a given season. I pulled data for all years since 1982 and saved itnto a dataframe.
+                    </p>
+                    <p>
+                        <strong>CommonTeamRoster:</strong> The LeagueStandings dataset has stats for all teams for a given season. I pulled data for all years since 1982 and saved itnto a dataframe.
+                    </p>
+                    <p>
+                        <strong>PlayerCareerStats:</strong> The LeagueStandings dataset has stats for all teams for a given season. I pulled data for all years since 1982 and saved itnto a dataframe.
+                    </p>
+
+                    <p>
+                        <h3 id="data-cleaning">2 – Data Cleaning and Feature Engineering</h3>
+                    </p>
+                    <p>
+                        Some of the features I was interested in tracking were not readily available in the datasets but could be derived from existing variables.
+                    </p>
+                    <p>
+                        <strong>Assistance/Turnover Ratio:</strong> I transformed the 'Assistance per Game' and the 'Turnover per Game' into the 'Assistance-Turnover Ratio' variable by dividing the first by the latter.
+                    </p>
+                    <pre><code>
+# Transform the 'Assitance per Game', and the 'Turnover per Game' into the 'Assistance-Turnover Ratio' variable
+by_team['AST_TOV_RAT'] = by_team['AST']/by_team['TOV']
+by_team = by_team.drop(['AST', 'TOV'], axis=1)
+                    </code></pre>
+                    <p>
+                        <strong>Home Court Advantage:</strong> The home court results were originally formatted as a string with numbers representing 'win-loss'; '24-18', for example. It was converted to a winning percentage by dividing the wins by the sum of wins and losses.
+                    </p>
+                    <pre><code>
+# Splits the column into two using the '-' separator.
+league_standings[['HOME_W', 'HOME_L']] = league_standings['HOME'].str.split('-', expand=True)
+
+# Converts to integer
+league_standings['HOME_W'] = league_standings['HOME_W'].astype(int)
+league_standings['HOME_L'] = league_standings['HOME_L'].astype(int)
+
+# Creates a calculated column for the win/loss percentage and drop old columns
+league_standings['HOME_WIN_PCT'] = league_standings['HOME_W']/(league_standings['HOME_W']+league_standings['HOME_L'])
+league_standings = league_standings.drop(['HOME', 'HOME_W', 'HOME_L'], axis=1)
+                    </code></pre>
+
+                    <p>
+                        <strong>Scoring distribution (top 3 players score at least 10 points per game):</strong> For this feature, I created a dataframe with only the top 3 scorers for each team and season using their average points per game. Next, I created a dataframe with only the lowest scorer of each group to check whether he scored at least 10 points and created a Boolean to represent it. Finally, I created an additional column with the average points per game for the top 3 players for each team and year.
+                    </p>
+                    <pre><code>
+# Group by Team and Year, order by greatest points per game average, and keep only the top 3 in each group
+rosters_players_top3 = rosters_players_selected.sort_values('PTS', ascending=False).groupby(["TEAM_ID", "SEASON_ID"]).head(3)
+rosters_players_top3 = rosters_players_top3.sort_values(['TEAM_ID','SEASON_ID']).reset_index(drop=True)
+
+# Extracted only the lowest scorer out of the top 3
+rosters_players_top3_min = rosters_players_top3[['TEAM_ID', 'SEASON_ID', 'PPG']].groupby(by=['TEAM_ID', 'SEASON_ID']).min().reset_index()
+
+# Created boolean to represent teams and years where all the top 3 scorers averaged at least 10 points
+rosters_players_top3_min['TOP3_P14'] = np.where(rosters_players_top3_min['PPG']>=10, 1, 0)
+rosters_players_top3_min = rosters_players_top3_min.rename(columns={'SEASON_ID':'YEAR'})
+rosters_players_top3_min = rosters_players_top3_min.drop(['PPG'], axis=1)
+                    </code></pre>
+                    <p>
+                        <strong>Bench production:</strong> To extract the bench players from the players and rosters dataset, I first identified the top 5 players who played the most minutes and created a new dataframe. I assumed all other players to be 'bench' players. Next, I subtracted the original dataframe from the starters’ dataframe to create a table with only the bench players.
+                    </p>
+                    <p>
+                        Next, I grouped the table with bench players by team and year and added the total points of all bench players for each team and year. Since there are 82 games per season, I divided the total points by 82 to get the average points per game by bench players. Finally, I created a Boolean to represent whether a team averages at least 30 points per game "off the bench."
+                    </p>
+                    <pre><code>
+# Extracts the top 5 players with most minutes played
+rosters_players_starters = rosters_players_selected.sort_values('MIN', ascending=False).groupby(["TEAM_ID", "SEASON_ID"]).head(5)
+rosters_players_starters = rosters_players_starters.sort_values(['TEAM_ID','SEASON_ID'])
+
+#extracted the indexes to subtract the starters dataframe from the original dataframe
+starters_idx = list(rosters_players_starters.index.values)
+off_the_bench = rosters_players_selected.drop(index=starters_idx)
+
+# Sums the total points for all players and divide by 82
+off_the_bench_sum = off_the_bench[['TEAM_ID', 'SEASON_ID', 'PTS']].groupby(by=['TEAM_ID', 'SEASON_ID']).sum().reset_index()
+off_the_bench_sum['OFF_BENCH_PPG'] = off_the_bench_sum['PTS']/82
+
+# Creates a boolean for wheter a team averages at least 30 points off the bench for a given year
+off_the_bench_sum['BENCH_P30'] = np.where(off_the_bench_sum['OFF_BENCH_PPG']>=30, 1, 0)
+off_the_bench_sum = off_the_bench_sum.rename(columns={'SEASON_ID':'YEAR'})
+off_the_bench_sum = off_the_bench_sum.drop('PTS', axis=1)
+                    </code></pre>
+
+                    <p>
+                        <h3 id="feature-selection">3 – Feature Selection</h3>
+                    </p>
+                    <p>
+                        In order to test the relevance of the selected features over the win percentage in NBA's regular season, I built and evaluated a multivariate linear regression model. I started by loading a CSV file with all the features extracted from the raw datasets and dropping unnecessary variables, leaving only the features potentially relevant to the model.
+                    </p>
+                    <p>
+                        <img src="./images/nba_data_images/data_set_features.png" alt="image of the dataset" style="width: 100%; max-width: 800px;"/>
+                    </p>
+                    <p><strong>Field Definitions</strong></p>
+                    <p>
+                        <strong>WIN_PCT: </strong>Wining percentage <strong>FG_PCT: </strong>Field Goal Percentage <strong>REB: </strong>Number of Rebounds per Game <strong>AST_TOV_RAT: </strong>Assistance/Turnover Ratio <strong>PTS: </strong>Average Points Per Game <strong>OPP_PPG: </strong>Average Opponent Points Per Game <strong>HOME_WIN_PCT: </strong>Percentage of Home Games Won <strong>PLAYOFF: </strong>Whether a Tean Classified to Playoffs a Given Year <strong>TOP3_PPG: </strong>Average Points Per Game by the Top 3 Scorers <strong>TOP3_P10: </strong>Whether the Top 3 Scorers All Averaged at Least 10 Points <strong>OFF_BENCH_PPG: </strong>Average Points Per Game Off-The-Bench <strong>BENCH_P30: </strong>Whether a Team Averaged 30 plus Points Off-The-Bench per Game
+                    </p>
+                    <p><strong>Correlation Matrix</strong></p>
+                    <p>
+                        Next is a Pearson Correlation matrix that shows how correlated variables are with each other. The most relevant row is the first, where we can assess the correlation between the variable I'm trying to predict and all the others. It's noticeable that TOP3_P10, OFF_BENCH_PPG, and BENCH_P30 are not linearly correlated to the win percentage, so I'm not using these.
+                    </p>
+                    <P>
+                        The PPG and OPP_PPG variables are highly correlated among themselves, violating the multicollinearity assumption for regression models, so only OPP_PPG will be used. FG_PCT is also highly correlated to TOP3_PPG, so only FG_PCT will be used.
+                    </P>
+                    <P>
+                        In addition to that, HOME_WIN_PCT, the most correlated variable, is not interesting as a predictor for winning percentage since it accounts for half of the games represented by it. The PLAYOFF variable is also not relevant for the sake of this model.
+                    </P>
+                    <p>
+                        <img src="./images/nba_data_images/correlation_matrix.png" alt="image of the dataset" style="width: 100%; max-width: 500px;"/>
+                    </p>
+                    <p>
+                        <h3 id="model-implementation">4 – Model Implementation</h3>
+                    </p>
+                    <P>
+                        Finally, out of the original features, the selected ones to be used in the model are: FG_PCT, REB, AST_TOV_RAT, and OPP_PPG. I separated the data set into training and testing sets using a test_size of 0.2, and StatsModels' Ordinary Least Squares model, ols(), was used to create the multivariate linear regression model.
+                        Since the variable the model is trying to predict and some of the predictors are on a vastly different scale, I'm rescaling the variables using StandarScaler. After scalling, all predictors have a mean of zero and a standard deviation of one after scaling.
+                    </P>
+                    <p>
+                        <img src="./images/nba_data_images/regression_model.png" alt="image of the dataset" style="width: 100%; max-width: 400px;"/>
+                    </p>
+                    <p>
+                        The resulting model has an adjusted R-Squared value of 0.767, which means the predictor variables account for 76.7% of the variation in the predicted variable. It's interesting to note that the Intercept has a coefficient of .5, which means that if all the predictors are zero (which in this case represents the mean) a team would win half of the games.
+                    </p>
+                    <p>
+                        Since the data was scaled to have a mean of zero and a standard deviation of one, the coefficients will be referring to one standard deviation unit in the predictor. The standard deviation for each variable is in the table below.
+                    </p>
+                    <p>
+                        <img src="./images/nba_data_images/standard_deviation_table.png" alt="image of the dataset" style="width: 100%; max-width: 200px;"/>                        
+                    </p>
+                    <p>
+                        The coefficients can thus be interpreted as follows:
+                        <ul>
+                            <li>FG_PCT: For each 1.9% increase in the Field Goal Percentage, the Wining Rate is expected to increase by 8.7%</li>
+                            <li>REB: For each 2.13 Rebounds Per Game increase, the Wining Rate is expected to increase by 5.5%</li>
+                            <li>AST_TOV_RAT: For each 0.2 increase in the assistance/turnover ratio, the Wining Rate is expected to increase by 4.9%</li>
+                            <li>OPP_PPG: For each 7.4 Opponent Points Per Game increase, the Wining Rate is expected to decrease by 11.1%</li>
+                        </ul>
+                    </p>
+
+                    <p>
+                        <h3 id="model-evaluation">5 – Model Evaluation</h3>
+                    </p>
+                    <p>
+                        Next I checked for the following regression model assumptions to validate the model.
+                        <ul>
+                            <li>Linear relationship</li>
+                            <li>Multivariate Normality</li>
+                            <li>No Multicollinearity</li>
+                            <li>Homoscedasticity</li>
+                            <li>Normally Distributed Residuals</li>
+                        </ul>
+                    </p>
+                    <p>
+                        <strong>Linear Relationship, Multivariate Normality, and No Multicollinearity</strong>
+                    </p>
+                    <p>
+                        The chart below shows a scatterplot between each pair of variables and a histogram for each variable. From this chart, we can confirm the first three linear regression model assumptions: 1) The predictor variables are linearly correlated to the predicted variable and have weak to moderate correlation. 2) The predictor variables are not correlated to each other. 3) Each of the predictor variables follows a normal distribution.
+                    </p>
+                    <p>
+                        <img src="./images/nba_data_images/pairplot.png" alt="image of the dataset" style="width: 100%; max-width: 800px;"/>                        
+                    </p>
+                    <p>
+                        <strong>Homoscedasticity, Normal Distribution of Residuals</strong>
+                    </p>
+                    <p>
+                        The following charts account for the other model assumptions: 1) Homoscedasticity: the residuals are randomly distributed. 2) The residuals follow a normal distribution.
+                    </p>
+                    <div>
+                        <img src="./images/nba_data_images/residuals_scatter.png" alt="image of the dataset" style="width: 100%; max-width: 380px;"/>                        
+                        <img src="./images/nba_data_images/qq_plot.png" alt="image of the dataset" style="width: 100%; max-width: 380px;"/>                       
+                        <img src="./images/nba_data_images/residuals_histogram.png" alt="image of the dataset" style="width: 100%; max-width: 380px;"/>                        
+                    </div>
+                    <p>
+                        <h3 id="conclusion">5 – Conclusion</h3>
+                    </p>
+                    <p>
+                        After considering all the parameters suggested by Gemini as determinant factors for an NBA team's success in the regular season, it was clear that some of them were indeed very relevant. In contrast, others didn't seem to have a significant effect. The top three players scoring two digits and Bench Production showed little correlation with the win percentage. Field Goal Percentage showed the highest correlation among the Assistance/Turnover ratio. Rebounds and Opponent Points per game had a mild correlation with the win percentage. Combined, the Field Goal Percentage, Rebounds, Assistance/Turnover Ratio, and Opponent Points Per Game were able to explain 76% of the variation in the Win Percentage when used as predictors in a Multivariate Linear Regression model. It is also interesting to note that, according to the model, when all the four predictors have the mean value for that parameter the predicted win percentage is 50%. 
+                    </p>
+
+
+
+
+                    
+
+
+
+
+            <div id="footer">
+                <img id="footer-logo" src="./images/logomcl.png" height="32px">
+                <p style="padding: 10px;">©Marcel Castro-Lima</p>
+            </div>
+        </div>
+        
+    
+        <script src="script.js"></script>
+        <script src="mobile-nav.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    
+    </body>
+</html>
